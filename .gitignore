@@ -1,0 +1,36 @@
+# .gitignore for PX4 SITL Drone Simulation Project
+
+# Python virtual environment and caches
+
+venv/
+**pycache**/
+\*.py\[cod]
+\*.pyo
+\*.egg-info/
+
+# ROS2 (colcon) build and logs
+
+build/
+install/
+log/
+
+# PX4-Autopilot build artifacts
+
+PX4-Autopilot/build/
+PX4-Autopilot/build\_\*/
+
+# CMake generated files
+
+CMakeFiles/
+CMakeCache.txt
+cmake\_install.cmake
+
+# Editor directories
+
+.vscode/
+.idea/
+
+# System files
+
+.DS\_Store
+Thumbs.db
