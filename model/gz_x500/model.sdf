@@ -1,0 +1,81 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+  <model name="gz_x500">
+    <!-- Center of gravity link -->
+    <link name="base_link">
+      <pose>0 0 0 0 0 0</pose>
+      <inertial>
+        <!-- Total mass (kg) -->
+        <mass>2.5</mass>
+        <!-- Inertia matrix about the COM -->
+        <inertia>
+          <ixx>0.03</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.03</iyy>
+          <iyz>0</iyz>
+          <izz>0.05</izz>
+        </inertia>
+      </inertial>
+
+      <!-- Visual: main frame mesh -->
+      <visual name="frame_visual">
+        <geometry>
+          <mesh>
+            <uri>model://gz_x500/x500v2_frame.stl</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <!-- Collision: same mesh (or a simplified convex hull) -->
+      <collision name="frame_collision">
+        <geometry>
+          <mesh>
+            <uri>model://gz_x500/x500v2_frame.stl</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- Example rotor link (motor 1) -->
+    <link name="rotor_1_link">
+      <pose>0.205 0.0 0.0 0 0 0</pose>  <!-- adjust X/Y/Z to motor 1’s position -->
+      <visual name="rotor_1_visual">
+        <geometry>
+          <mesh>
+            <uri>model://gz_x500/motor_mount.stl</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="rotor_1_collision">
+        <geometry>
+          <mesh>
+            <uri>model://gz_x500/motor_mount.stl</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- Repeat <link> blocks for rotor_2_link … rotor_6_link -->
+
+    <!-- PX4 Vehicle Plugin: spins the rotors, bridges to PX4 SITL -->
+    <plugin name="px4_vehicle_plugin" filename="libgazebo_ignition_system.so">
+      <ros>
+        <namespace>/</namespace>
+        <!-- PX4 will listen on UDP 14540 and publish on 14557 by default -->
+        <argument>udp://:14540@localhost:14557</argument>
+      </ros>
+      <!-- Match the model name here -->
+      <vehicle_namespace>gz_x500</vehicle_namespace>
+      <!-- Tell the plugin how many rotors you have: -->
+      <rotor_count>6</rotor_count>
+      <!-- Positions of each rotor in the base_link frame: -->
+      <rotor>
+        <link>rotor_1_link</link>
+        <position>0.205  0.0    0.0</position>
+        <direction>1</direction>      <!-- 1 = CCW, -1 = CW -->
+      </rotor>
+      <!-- … rotor 2 through rotor 6 definitions … -->
+    </plugin>
+
+  </model>
+</sdf>
